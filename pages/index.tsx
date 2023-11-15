@@ -32,6 +32,27 @@ export default function Home() {
       })
       .catch((e) => console.log("request accounts ERR", e));
   };
+
+  const initSDK = async () => {
+    const MMSDK = new MetaMaskSDK();
+    await MMSDK.init();
+
+    const provider = MMSDK.getProvider();
+
+    provider
+      .request({
+        method: "eth_requestAccounts",
+        params: [],
+      })
+      .then((accounts) => {
+        if (accounts) {
+          console.debug(`connect:: accounts result`, accounts);
+          const account = (accounts as string[])[0];
+          alert(`connect:: account ${account}`);
+        }
+      })
+      .catch((e) => console.log("request accounts ERR", e));
+  };
   return (
     <>
       <Head>
@@ -42,7 +63,10 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <button className={styles.button} onClick={connect}>
-          Button
+          connect
+        </button>
+        <button className={styles.button} onClick={initSDK}>
+          initSDK
         </button>
       </main>
     </>
